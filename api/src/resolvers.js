@@ -5,27 +5,37 @@
 
 module.exports = {
   Query: {
-    // top level resolver
-    // demo(_,__, {models}){
-    //   models.Pet.findMany({})
-    // }
-    pets(_,__, ctx, info){
+    pets(_,{input}, ctx){
+      return ctx.models.Pet.findMany(input)
+    },
+    pet(_, {input}, ctx){
+      console.log('Query => pet')
+      return ctx.models.Pet.findOne(input)
+    }
+  },
+  Mutation: {
+    newPet(_, {input}, ctx){
+      pet = ctx.models.Pet.create(input)
+      return pet
+    },
+    updatePet(_, {input}, ctx) {
+      const pet = ctx.models.Pet.update(input.id, input.updates)
+      return pet
+    }
+  }, 
+  Pet: {
+    // First argument is goin to be a Pet
+    owner(_, __, ctx){
+      console.log("owner")
+      return ctx.models.User.findOne()
+      // ctx.models.User.findById(pet.user)
+    }
+  },
+  User: {
+    // First argument is going to be a user
+    pets(_, __, ctx){
+      console.log('User => pets')
       return ctx.models.Pet.findMany()
     }
-
-    
-  },
-  // Mutation: {
-    
-  // },
-  // Pet: {
-  //   img(pet) {
-  //     return pet.type === 'DOG'
-  //       ? 'https://placedog.net/300/300'
-  //       : 'http://placekitten.com/300/300'
-  //   }
-  // },
-  // User: {
-    
-  // }
+  }
 }

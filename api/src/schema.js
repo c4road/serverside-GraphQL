@@ -7,16 +7,36 @@ const typeDefs = gql`
   type User {
       id: ID!
       username: String!
+      pets: [Pet]!
   }
   type Pet {
       id: ID!
-      createAt: String!
+      createdAt: String!
       name: String!
       type: String!
+      img: String!
+      buddies: [Pet]
+      owner: User!
+  }
+
+  input PetInput {
+      name: String
+      type: String
+  }
+
+  input NewPetInput {
+    name: String!
+    type: String!
   }
 
   type Query {
-      pets: [Pet]!
+    pets(input: PetInput): [Pet]!
+    pet(input: PetInput): Pet
+  }
+
+  type Mutation {
+    newPet(input: NewPetInput): Pet!
+    updatePet(input: NewPetInput): Pet!
   }
 
 `;
